@@ -518,34 +518,36 @@ angular.module('afkl.lazyImage')
 
                 // Check if the container is in view for the first time. Utilized by the scroll and resize events.
                 var _onViewChange = function () {
-                    // only do stuff when not set already
-                    if (!loaded) {
+                    // $timeout runs the content asynchronously, so angular has time to render the page and we can calculate correct height / scroll values
+                    $timeout(function() {
+                      // only do stuff when not set already
+                      if (!loaded) {
 
-                        // Config vars
-                        var remaining, shouldLoad, windowBottom;
+                          // Config vars
+                          var remaining, shouldLoad, windowBottom;
 
-                        var height = _containerInnerHeight();
-                        var scroll = _containerScrollTop();
+                          var height = _containerInnerHeight();
+                          var scroll = _containerScrollTop();
 
-                        var elOffset = $container[0] === $window ? _elementOffset() : _elementOffsetContainer();
-                        windowBottom = $container[0] === $window ? height + scroll : height;
+                          var elOffset = $container[0] === $window ? _elementOffset() : _elementOffsetContainer();
+                          windowBottom = $container[0] === $window ? height + scroll : height;
 
-                        remaining = elOffset - windowBottom;
+                          remaining = elOffset - windowBottom;
 
-                        // Is our top of our image container in bottom of our viewport?
-                        //console.log($container[0].className, _elementOffset(), _elementPosition(), height, scroll, remaining, elOffset);
-                        shouldLoad = remaining <= offset;
+                          // Is our top of our image container in bottom of our viewport?
+                          //console.log($container[0].className, _elementOffset(), _elementPosition(), height, scroll, remaining, elOffset);
+                          shouldLoad = remaining <= offset;
 
 
-                        // Append image first time when it comes into our view, after that only resizing can have influence
-                        if (shouldLoad) {
+                          // Append image first time when it comes into our view, after that only resizing can have influence
+                          if (shouldLoad) {
 
-                            _placeImage();
+                              _placeImage();
 
-                        }
+                          }
 
-                    }
-
+                      }
+                    });
                 };
 
                 var _onViewChangeDebounced = srcSetService.debounce(_onViewChange, 300);

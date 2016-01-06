@@ -271,7 +271,7 @@ describe("srcset Service:", function() {
 
 describe("Image container and window scroll:", function() {
 
-    var $document, scope, $compile, $window;
+    var $document, scope, $compile, $window, $timeout;
 
     function scrollEvent(e) {
         if (document.createEvent) {
@@ -290,14 +290,14 @@ describe("Image container and window scroll:", function() {
 
     beforeEach(module('afkl.lazyImage'));
 
-    beforeEach(inject(['$compile', '$rootScope', '$document', '$window',
-        function(_$compile_, $rootScope, _$document_, _$window_) {
+    beforeEach(inject(['$compile', '$rootScope', '$document', '$window', '$timeout',
+        function(_$compile_, $rootScope, _$document_, _$window_, _$timeout_) {
 
             scope = $rootScope.$new();
             $document = _$document_;
             $compile = _$compile_;
             $window = _$window_;
-
+            $timeout = _$timeout_;
         }
     ]));
 
@@ -318,6 +318,8 @@ describe("Image container and window scroll:", function() {
         el[0].scrollTop = 400;
         scrollEvent(el[0]);
         scope.$digest();
+
+        $timeout.flush(1);
 
         expect(div.html()).toBe('<img alt="" class="afkl-lazy-image" src="img/foo.png">');
         el.remove();
@@ -371,6 +373,8 @@ describe("Image container and window scroll:", function() {
         $window.scrollTo ? $window.scrollTo(0, height) : document.documentElement.scrollTo(0, height);
         scrollEvent($window);
         scope.$digest();
+
+        $timeout.flush(1);
 
         expect(el.html()).toBe('<img alt="" class="afkl-lazy-image" src="img/foo.png">');
     });
