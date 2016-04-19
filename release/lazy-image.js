@@ -297,6 +297,8 @@ angular.module('afkl.lazyImage')
 
               $timeout(function() {
                 preventCalls = false;
+
+                call();
               }, delay);
             }
           };

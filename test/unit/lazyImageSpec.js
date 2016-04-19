@@ -242,7 +242,7 @@ describe("srcset Service:", function() {
         expect(image).toBe(undefined);
     });
 
-    it('Debouncer should be called once in 3 seconds', function() {
+    it('Debouncer should be called once in 3 seconds and called again', function() {
         var stub = jasmine.createSpy('debounced');
         var debounced = SrcSetService.debounce(stub, 3000);
 
@@ -265,7 +265,7 @@ describe("srcset Service:", function() {
 
         debounced();
 
-        expect(stub.calls.count()).toBe(2);
+        expect(stub.calls.count()).toBe(3);
     });
 });
 
